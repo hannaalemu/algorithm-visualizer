@@ -17,8 +17,10 @@ export default class Sorting extends React.Component {
     resetArray() {
         const array = [];
 
-        for(let i=0; i< 100; i++) {
-            array.push(randomNumberFrom(5, 100));
+        //The for loop determines how many bars are in the array
+        //The random number intervals determine how tall the bars are. We are using 5 because numbers less than 5 are harder to see
+        for(let i=0; i< 310; i++) {
+            array.push(randomNumberFrom(5, 550));
         }
 
         this.setState({array});
@@ -28,11 +30,25 @@ export default class Sorting extends React.Component {
         const {array} = this.state;
         return (
             <>
-                {array.map((value, index) => (
-                    <div className='array-bar'key={index}>
-                        {value}
-                    </div>
-                ))}
+                <div className='array-container'>
+
+                    {array.map((value, index) => (
+
+                        <div className='array-bar'
+                            key={index}
+                            style={{height: `${value}px`}}> </div>     
+                        ))}
+
+            {/* We are using an arrow function because we need a 'this' context here */}
+                <button onClick={()=> this.resetArray() } >Generate New Array!</button>
+                <button onClick={() => this.mergeSort() }>Merge Sort</button>
+                <button onClick={() => this.quickSort() }>Quick Sort</button>
+                <button onClick={() => this.bubbleSort() }>Bubble Sort</button>
+                <button onClick={() => this.heapSort() }>Heap Sort</button>
+
+
+                </div> 
+
             </>
         )
     }

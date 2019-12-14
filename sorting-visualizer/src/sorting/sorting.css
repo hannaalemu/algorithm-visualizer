@@ -1,0 +1,17 @@
+.array-bar {
+    width: 2px;
+    height: 30px;
+    margin: 0 1px;
+    background-color:blue;
+    display: inline-block;
+
+}
+
+.array-container {
+    position: absolute;
+    left: 60px;
+}
+
+button {
+    margin-right: 10px;
+}
