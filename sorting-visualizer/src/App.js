@@ -1,10 +1,10 @@
 import React from 'react';
-import Sorting from './sorting/sorting';
+import SortingVisualizer from './sorting-visualizer/sorting';
 import './App.css';
 
 function App() {
   return (
-      <Sorting />
+      <SortingVisualizer />
   );
 }
 
