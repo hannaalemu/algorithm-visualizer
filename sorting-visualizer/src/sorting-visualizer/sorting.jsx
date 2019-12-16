@@ -1,67 +1,6 @@
-// import React from 'react';
-// import './sorting.css';
-
-// export default class Sorting extends React.Component {
-//     constructor(props) {
-//         super(props);
-
-//         this.state= {
-//            array: [],
-//         };
-//     }
-
-//     componentDidMount() {
-//         this.resetArray();
-//     }
-
-//     resetArray() {
-//         const array = [];
-
-//         //The for loop determines how many bars are in the array
-//         //The random number intervals determine how tall the bars are. We are using 5 because numbers less than 5 are harder to see
-//         for(let i=0; i< 310; i++) {
-//             array.push(randomNumberFrom(5, 550));
-//         }
-
-//         this.setState({array});
-//     }
-
-//     render() {
-//         const {array} = this.state;
-//         return (
-//             <>
-//                 <div className='array-container'>
-
-//                     {array.map((value, index) => (
-
-//                         <div className='array-bar'
-//                             key={index}
-//                             style={{height: `${value}px`}}> </div>     
-//                         ))}
-
-//             {/* We are using an arrow function because we need a 'this' context here */}
-//                 <button onClick={()=> this.resetArray() } >Generate New Array!</button>
-//                 <button onClick={() => this.mergeSort() }>Merge Sort</button>
-//                 <button onClick={() => this.quickSort() }>Quick Sort</button>
-//                 <button onClick={() => this.bubbleSort() }>Bubble Sort</button>
-//                 <button onClick={() => this.heapSort() }>Heap Sort</button>
-
-
-//                 </div> 
-
-//             </>
-//         )
-//     }
-// }
-
-
-// //Generate random number between min and max intervals
-// function randomNumberFrom(min, max) {
-//     return Math.floor(Math.random() * (max - min + 1) + min);
-// }
-
 import React from 'react';
 import {getMergeSortAnimations} from './sorting-algorithms/sorting-algorithms';
+
 import './sorting.css';
 
 // Change this value for the speed of the animations.
@@ -122,16 +61,71 @@ export default class SortingVisualizer extends React.Component {
   }
 
   quickSort() {
-    // We leave it as an exercise to the viewer of this code to implement this method.
+    
   }
 
   heapSort() {
     // We leave it as an exercise to the viewer of this code to implement this method.
   }
 
-  bubbleSort() {
-    // We leave it as an exercise to the viewer of this code to implement this method.
-  }
+  bubbleSort(array) {
+
+    let states = [];
+    async function quickSort(arr, start, end) {
+        if (start >= end) {
+        return;
+        }
+        let index = await partition(arr, start, end);
+        states[index] = -1;
+    
+        await Promise.all([
+        quickSort(arr, start, index - 1),
+        quickSort(arr, index + 1, end)
+        ]);
+    }
+    
+    async function partition(arr, start, end) {
+        for (let i = start; i < end; i++) {
+        states[i] = 1;
+        }
+    
+        let pivotValue = arr[end];
+        let pivotIndex = start;
+        states[pivotIndex] = 0;
+        for (let i = start; i < end; i++) {
+        if (arr[i] < pivotValue) {
+            await swap(arr, i, pivotIndex);
+            states[pivotIndex] = -1;
+            pivotIndex++;
+            states[pivotIndex] = 0;
+        }
+        }
+        await swap(arr, pivotIndex, end);
+    
+        for (let i = start; i < end; i++) {
+        if (i != pivotIndex) {
+            states[i] = -1;
+        }
+        }
+    
+        return pivotIndex;
+    }
+
+    async function swap(arr, a, b) {
+        await sleep(50);
+        let temp = arr[a];
+        arr[a] = arr[b];
+        arr[b] = temp;
+    }
+    
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    
+}
+
+
+}
 
   // NOTE: This method will only work if your sorting algorithms actually return
   // the sorted arrays; if they return the animations (as they currently do), then
@@ -167,7 +161,7 @@ export default class SortingVisualizer extends React.Component {
         <button onClick={() => this.mergeSort()}>Merge Sort</button>
         <button onClick={() => this.quickSort()}>Quick Sort</button>
         <button onClick={() => this.heapSort()}>Heap Sort</button>
-        <button onClick={() => this.bubbleSort()}>Bubble Sort</button>
+        <button onClick={() => this.getBubbleSortAnimations(this.state.array)}>Bubble Sort</button>
         <button onClick={() => this.testSortingAlgorithms()}>
           Test Sorting Algorithms (BROKEN)
         </button>
